@@ -1,0 +1,54 @@
+{
+    "jpsVersion": "0.6",
+    "jpsType": "update",
+    "build": "202310061817",
+    "application": {
+        "id": "devtoolset-7-installer",
+        "name": "devtoolset-7 Installer",
+        "categories": [
+            "apps/dev-and-admin-tools"
+        ],
+        "version": "0.1",
+        "homepage": "https://github.com/fairnesscoop/jelastic-devtoolset-7-installer",
+        "targetNodes": {
+            "nodeType": "*"
+        },
+        "procedures": [
+            {
+                "id": "log",
+                "onCall": {
+                    "log": "${this.message}"
+                }
+            },
+            {
+                "id": "installDevtoolset7",
+                "onCall": [
+                    {
+                        "cmd": {
+                            "commands": [
+                                "yum install centos-release-scl",
+                                "yum-config-manager --enable rhel-server-rhscl-7-rpms",
+                                "yum install devtoolset-7",
+                                "echo '#!/bin/bash\nsource scl_source enable devtoolset-7\n' > /etc/profile.d/enabledevtoolset7.sh"
+                            ],
+                            "nodeType": "${targetNodes[0].nodeType}",
+                            "user": "root"
+                        }
+                    }
+                ]
+            }
+        ],
+        "menu": [
+            {
+                "caption": "Install devtoolset-7",
+                "confirmText": "Install devtoolset-7",
+                "procedure": "installDevtoolset7",
+                "loadingText": "Installing...",
+                "successText": "devtoolset-7 has been successfully installed"
+            }
+        ],
+        "success": {
+            "text": "jelastic-devtoolset7 successfully enabled."
+        }
+    }
+}
